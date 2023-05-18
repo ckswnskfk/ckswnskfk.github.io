@@ -19,14 +19,14 @@ locale: "ko-KR"
 title: "개발 잡다"
 title_separator: "-"
 subtitle: # site tagline that appears below site title in masthead
-name: "빠삭빠삭한 개발자"
-description: "빠삭하게 알면 좋겠지?"
+name: "ckswnskfk"
+description: ""
 url: "https://ckswnskfk.github.io/" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl: # the subpath of your site, e.g. "/blog"
 repository: "ckswnskfk/ckswnskfk.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser: "/assets/images/peak.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo: # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
-masthead_title: "기록하면 정리된다" # overrides the website title displayed in the masthead, use " " for no title
+masthead_title: "record and organize" # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
 words_per_minute: 200
 comments:
@@ -103,10 +103,10 @@ analytics:
 
 # Site Author
 author:
-  name: "먼지형"
+  name: "이찬주"
   avatar: # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio: "꾸준히 공부하자! 재밌잖아"
-  location: "하남시"
+  bio: "행복해지기 위해 공부하자"
+  location: "대한민국"
   email:
   links:
     - label: "Email"
