@@ -1,0 +1,141 @@
+---
+title: "[66해빗 페이백 챌린지] 7일차"
+excerpt: "호이스팅"
+categories:
+  - Javascript
+tags:
+  - f-lab
+  - 에프랩
+  - TIL
+  - Javascript
+  - Hoisting
+last_modified_at: 2023-05-26
+toc: true
+---
+
+호이스팅. 변수나 함수 선언 시 스코프의 최상단으로 끌어올려 진다고 하는, 내가 알기론 자바스크립트만이 갖는 특별한 현상이다. 이 호이스팅이 왜 일어나는지, 나아가 주의해야 할 점이 무엇인지 알아보자.
+
+# 호이스팅
+
+자바스크립트는 인터프리터 언어로 코드를 한 줄씩 읽어 내려가며 실행한다고 한다. 그런데 var로 선언된 변수는 이 원칙을 따르지 않는 듯 하다.
+
+```javascript
+console.log(a); // undefined
+var a;
+```
+
+위치상 아직 선언되지 않은 변수를 불렀기 때문에 오류가 발생할 것 같지만 undefined가 출력 될 뿐이다. 이처럼 해당 스코프의 중간 혹은 마지막 부분에 변수가 선언 되더라도 마치 첫 부분에 선언된 것처럼 끌어올려지는 현상을 호이스팅이라고 한다.
+
+변수는 호이스팅 되지만, 값은 어떨까?
+
+```javascript
+console.log(a); // undefined
+var a = 1;
+console.log(a); // 1
+```
+
+값은 호이스팅되지 않는다. 그렇다면 또 다른 변수 선언 키워드인 let과 const는 어떨까?
+
+```javascript
+console.log(b); // Uncaught ReferenceError: Cannot access 'b' before initialization
+let b = 10;
+console.log(b);
+```
+
+이번엔 호이스팅이 발생하지 않아 정상적으로(?) 오류가 발생한다. 왜 이런 일이 발생할까?
+
+## 호이스팅이 발생하는 이유
+
+`var a = 1;` 는 자바스크립트 엔진에 의해 두 부분으로 나뉘어 처리된다. `var a` 는 컴파일러 단계에서 처리되고, `a = 2` 는 실행 단계에서 처리된다. 이것에 대해 좀 더 자세히 알아보자.
+
+함수의 실행이나 블록에 의해 콜 스택에 쌓이게 되는 실행 컨텍스트. 이 실행 컨텍스트의 구성 요소중 하나인 LexicalEnvironment는 environmentRecord라는 요소를 가지고 있다. 이 environmentRecord는 현재 컨텍스트와 관련된 코드의 식별자 정보들이 저장된다. 함수의 매개변수 식별자, var로 선언된 변수, 선언된 함수 자체 등이 식별자에 해당한다. 컨텍스트 내부 전체를 처음부터 끝까지 훑어나가며 순서대로 수집한다. 이 시점이 해당 컨텍스트가 함수의 실행 등으로 콜 스택에 적재되는 순간이기 때문에 자바스크립트 엔진은 코드의 실행 이전에 해당 컨텍스트의 변수명을 알고 있게 되는 것이다.
+
+## 호이스팅과 TDZ
+
+위와 같은 이유로 선언된 변수나 함수가 끌어올려진 것 처럼 보이는데, var와 달리 let과 const는 호이스팅이 발생하지 않는다. 이들은 TDZ에 들어가기 때문인데, TDZ란 무엇일까?
+
+# TDZ(Temporal Dead Zone)
+
+말하자만 일시적인 사각지대로, 변수를 사용하는 것을 비허용하는 개념상의 공간이다. 위에서 본 것과 같이 TDZ에 있는 식별자에 접근하게 되면 Uncaught ReferenceError: Cannot access '...' before initialization 에러가 발생하게 된다.
+
+사실 정확히 말하자면 let과 const 또한 environmentRecord에 수집된다. 그러나 var와 다르게 초기화되기 전까지 TDZ에 머물러 있기 때문에 호이스팅이 발생하지 않는 것 처럼 보이며 참조가 불가능한 것이다.
+
+## let, const는 왜 TDZ에 들어갈까
+
+```cpp
+// var
+var->AllocateTo(VariableLocation::PARAMETER, index);
+
+// const
+VariableProxy* proxy =
+    DeclareBoundVariable(local_name, VariableMode::kConst, pos);
+proxy->var()->set_initializer_position(position());
+
+// let
+VariableProxy* proxy =
+    DeclareBoundVariable(variable_name, VariableMode::kLet, class_token_pos);
+proxy->var()->set_initializer_position(end_pos);
+```
+
+V8 엔진의 코드를 보면 var 는 변수 객체를 생성한 후 AllocateTo 메소드를 통해 바로 메모리에 공간을 할당한다.
+
+const 나 let 은, set_initializer_position 메소드를 통해 해당 코드의 위치를 의미하는 position 값만 정한다. 선언은 되어 있지만 변수에 값을 담기 위한 메모리에 공간이 확보되지 않은 상태가 되는 것이다. 바로 이 시점에 let, const 키워드로 생성된 변수들이 TDZ에 들어간다.
+
+따라서 TDZ에 있는 변수 객체란, 선언은 되어있지만 아직 초기화되지 않아서 변수에 담길 값을 위한 공간이 메모리에 할당되지 않은 상태임을 알 수 있다.
+
+# 변수 선언 외에는?
+
+var와 let, const에 대해서는 알아봤지만 함수, 클래스 등 다른 요소들도 선언된다. 이것들에 대해 간단히 알아보자.
+
+## 함수 표현식과 함수 선언문
+
+함수 선언문은 호이스팅 되는 반면, 함수 표현식은 호이스팅되지 않는다.
+
+- 함수 선언문
+
+```javascript
+say(); // Hello
+
+function say() {
+  console.log("Hello");
+}
+
+say(); // Hello
+```
+
+- 함수 표현식
+
+```javascript
+say(); // Uncaught TypeError: say is not a function
+
+var say = function () {
+  console.log("Hello");
+};
+
+say();
+```
+
+## import 모듈
+
+import한 모듈도 호이스팅이 된다.
+
+```javascript
+say(); // 동작함
+import { say } from "./myModule";
+```
+
+## 클래스
+
+클래스는 호이스팅 되지 않는다. 선언문 이전에 참조할 수 없다.
+
+```javascript
+console.log(myClass);
+// Uncaught ReferenceError: myClass is not defined
+
+class myClass {
+  //
+}
+```
+
+\*출처: <https://ingg.dev/hoisting/>  
+코어 자바스크립트(서적)
