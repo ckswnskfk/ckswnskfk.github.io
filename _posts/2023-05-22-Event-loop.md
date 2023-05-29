@@ -1,5 +1,5 @@
 ---
-title: "[66해빗 페이백 챌린지] 3일차"
+title: "[F-Lab 모각코 챌린지] 3일차"
 excerpt: "이벤트 루프"
 categories:
   - Browser
