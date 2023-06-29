@@ -28,7 +28,7 @@ async function func() {
 
 `async function` 선언은 `AsyncFunction`객체를 반환하는 비동기 함수를 정의한다(자바스크립트에서 모든 비동기 함수는 사실상 `AsyncFunction` 객체이다). 암시적으로 `Promise`를 사용하여 결과를 반환한다. 프라미스가 아닌 값을 반환하더라도 `resolve` 상태의 프라미스로 값을 감싸 이행된 프라미스가 반환된다.
 
-한 마디로 하면, `async` 키워드가 붙은 함수의 반환 값은 항상 `resolve`된 함수다!
+한 마디로 하면, `async` 키워드가 붙은 함수의 반환 값은 `resolve`된 함수다!
 
 # await
 
