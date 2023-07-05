@@ -2,7 +2,7 @@
 title: "[F-Lab 모각코 챌린지] 46일차"
 excerpt: "five lines of code - 2"
 categories:
-  - Javascript
+  - Refactoring
 tags:
   - f-lab
   - 에프랩
