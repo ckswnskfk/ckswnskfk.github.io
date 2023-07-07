@@ -56,6 +56,20 @@ alert(arr instanceof Object); // true
 
 1. 클래스에 `Symbol.hasInstance`가 구현되어 있으면 instanceof가 실행될 때, `Class[Symbol.hasInstance](obj)`가 호출된다. 호출 결과는 `true`나 `false`이어야 한다.
 
+```javascript
+// canEat 프로퍼티가 있으면 animal이라고 판단할 수 있도록
+// instanceOf의 로직을 직접 설정
+class Animal {
+  static [Symbol.hasInstance](obj) {
+    if (obj.canEat) return true;
+  }
+}
+
+let obj = { canEat: true };
+
+alert(obj instanceof Animal); // true, Animal[Symbol.hasInstance](obj)가 호출됨
+```
+
 2. 하지만 대부분의 클래스엔 `Symbol.hasInstance`가 구현되어있지 않다. 이럴 때 `obj instanceOf Class`는 `Class.prototyp`e이 `obj` 프로토타입 체인 상의 프로토타입 중 하나와 일치하는지 확인한다.
 
 ```javascript
