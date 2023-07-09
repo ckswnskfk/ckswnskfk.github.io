@@ -225,8 +225,11 @@ const CYCLE = [new Red(), new Green(), new Yellow()];
 6. 오류가 더 이상 없으면 인터페이스의 이름을 모든 위치에서 영구적인 것으로 변경.
 
 ```typescript
-enum TrafficLight {}
-// ...
+interface TrafficLight {
+  isRed(): boolean;
+  isYellow(): boolean;
+  isGreen(): boolean;
+}
 ```
 
 이 리팩터링 패턴은 당장은 별로 가치가 없어보이지만 나중에 환상적인 개선을 가능하게 한다.
