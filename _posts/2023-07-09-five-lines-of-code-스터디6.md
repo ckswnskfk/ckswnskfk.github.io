@@ -210,7 +210,7 @@ class Green implements TrafficLight {
 }
 ```
 
-    - 메서드명을 적절히 바꿔 이 메서드 처리가 끝났음을 알린다.
+메서드명을 적절히 바꿔 이 메서드 처리가 끝났음을 알린다.
 
 ```typescript
 class Red implements TrafficLight {
